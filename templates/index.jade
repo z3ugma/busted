@@ -1,0 +1,40 @@
+doctype html(lang='en')
+head
+  meta(charset='UTF-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  meta(http-equiv='X-UA-Compatible', content='ie=edge')   
+  title Busted    
+  
+  {% assets "sass_all" %}
+  link(rel="stylesheet", href="/static/css/app.css")
+  {% endassets %}
+
+  body
+    .section
+      .container.has-text-centered
+        .columns
+          .column.is-half
+            .has-text-centered
+              if info.stops | length
+                .box
+                  each s in info.stops
+                    h1.subtitle {{s.name}}
+                      each a in s.crossings or []
+                        h2.subtitle 
+                          span.is-size-3.has-text-weight-bold {{a.predTime or "??"}} 
+                          span.has-text-grey-dark / {{a.schedTime}}
+          .column.is-half
+            each i in info.vehicles
+              .box
+                .columns.is-vcentered.is-mobile
+                  .column.is-2
+                    .button(class="{{i.adherence | adherence_color}}") {{i.adherence | adherence_display}}
+                  .column
+                    h1.subtitle {{i.address}}
+                    p 
+                      | Next: 
+                      em {{i.nextStop}}
+    footer.has-text-centered
+      .timestamp.has-text-white
+        p {{info.timestamp}}
+      a.button.is-light(href="javascript:window.location.reload(true)")  🔄 Refresh
