@@ -1,2 +1,10 @@
 venv/
 .flaskenv
+__pycache__/
+.vscode/
+
+*.pyc
+
+# Generated CSS files
+static/css/*.css
+static/.webassets*
