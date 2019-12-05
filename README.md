@@ -1,7 +1,6 @@
 # busted
 A small website to show arrivals of buses at my office in Madison, WI
 
-
 Use the Network tab for the site http://webwatch.cityofmadison.com/TMWebWatch/GoogleLiveMap to find the stop, route, and direction IDs for a given route.
 
 ## Routes 
