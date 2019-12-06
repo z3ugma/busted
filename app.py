@@ -2,10 +2,11 @@ from flask import Flask, jsonify, render_template
 import requests, os, json, datetime
 import pyjade
 from flask_assets import Environment, Bundle
+
+from os.path import join, dirname
 from dotenv import load_dotenv
 
-APP_ROOT = os.path.join(os.path.dirname(__file__), '..')   # refers to application_top
-dotenv_path = os.path.join(APP_ROOT, '.flaskenv')
+dotenv_path = join(dirname(__file__), '.flaskenv')
 load_dotenv(dotenv_path)
 
 app = Flask(__name__)
@@ -39,7 +40,7 @@ def get_info():
         'cache-control': "no-cache",
         }
     response['vehicles'] = json.loads(requests.request("POST", url, data=payload, headers=headers).text)['d'] or []
-    
+
     url = "http://webwatch.cityofmadison.com/TMWebWatch/GoogleMap.aspx/getStopTimes"
     payload = json.dumps(
         {"stops":[
@@ -58,11 +59,10 @@ def get_info():
         url = "https://api.geocod.io/v1.4/reverse"
         querystring = {"api_key": GEOCODIO_API_KEY}
         coded_addresses = requests.request("POST", url, data=address_sets, headers=headers, params=querystring)
-
         for idx,v in enumerate(coded_addresses.json().get('results')) or []:
             nearest_streets = " / ".join(list(set([ ' '.join([ (i['address_components'].get('predirectional') or ''), i['address_components']['street'] ]).strip() for i in v['response']['results']])))
             response['vehicles'][idx]['address'] = nearest_streets
-    
+
     return response
 
 @app.template_filter('adherence_color')
@@ -72,7 +72,7 @@ def adherence_color(c):
     elif int(c) >=0:
         return "is-primary"
     elif int(c) <-5:
-        return "is-danger"    
+        return "is-danger"
     elif int(c) <0:
         return "is-warning"
     else:
